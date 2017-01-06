@@ -15,6 +15,7 @@ class RadioList(Frame):
             value=value,
             variable=self._var,
             anchor=W,
-            width=200)
+            # width=200
+            )
         # rb.grid()
         rb.pack(fill=X)
