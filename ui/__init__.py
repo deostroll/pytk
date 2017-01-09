@@ -1,2 +1,1 @@
 from RadioList import RadioList
-from VerticalScrolledFrame import VerticalScrolledFrame

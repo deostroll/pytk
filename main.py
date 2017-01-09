@@ -1,31 +1,44 @@
+from ui import RadioList
 from Tkinter import *
-from num2words import num2words as n2w
-from ui import RadioList, VerticalScrolledFrame
+from num2words import num2words as nw
 
 class App(Frame):
     def __init__(self, parent=None):
+        # Frame.__init__(self, parent, bd=2, bg="white")
         Frame.__init__(self, parent)
-        # self.geometry('400x300')
-        self.grid()
-        self.label = Label(self, text="hello world")
-        self.label.grid()
-        container = Frame(self)
-        container.grid(row=1, columnspan=3)
-        vframe = VerticalScrolledFrame(container)
-        # vframe.pack(fill=BOTH);
-        # vframe.pack()
-        # vframe.pack(side=LEFT, anchor=W)
-        vframe.grid()
-        rbl = RadioList(vframe.interior, bg="white")
-        for x in range(100, 150):
-            i = x + 1
-            t = n2w(i)
-            rbl.add(t, i)
-        rbl.grid(columnspan=3)
+        root = self.master
+        root.geometry('400x300')
+        root.title('My radio list')
+        root.resizable(width=False, height=False)
+        self.pack(fill=BOTH,expand=YES)
 
-root = Tk()
-app = App(root)
-root.resizable(width=False, height=False)
-root.geometry('550x300')
-root.title('My App')
-root.mainloop()
+        # self.label = Label(self, text="Hello World", anchor=W, bd=2)
+        # self.label.pack(fill=X)
+        frame = Frame(self, name="btnContainer")
+        frame.pack(anchor=W)
+
+        btn = Button(frame, text="Add", command=self.add)
+        btn.pack(side=LEFT)
+
+        self.rl = rl = RadioList(self, command=self.changed)
+        self.rl.pack(fill=BOTH)
+
+        btn2 = Button(frame, text="Set", command=rl._set_scroll)
+        btn2.pack(side=LEFT)
+
+        self.counter = 0
+
+    def add(self):
+        count = self.counter
+        self.counter = self.counter + 1
+        rl = self.rl
+
+        rl.add(nw(count), count)
+
+    def changed(self, *args):
+        print args
+
+
+
+app = App()
+app.mainloop()

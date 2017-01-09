@@ -14,19 +14,21 @@ class VerticalScrolledFrame(Frame):
         Frame.__init__(self, parent, *args, **kw)
 
         # create a canvas object and a vertical scrollbar for scrolling it
-        vscrollbar = Scrollbar(self, orient=VERTICAL)
+        vscrollbar = Scrollbar(self, orient=VERTICAL, name="scroll")
         vscrollbar.pack(fill=Y, side=RIGHT, expand=FALSE)
         canvas = Canvas(self, bd=0, highlightthickness=0,
-                        yscrollcommand=vscrollbar.set)
+                        yscrollcommand=vscrollbar.set, name="canvas")
         canvas.pack(side=LEFT, fill=BOTH, expand=TRUE)
         vscrollbar.config(command=canvas.yview)
 
         # reset the view
         canvas.xview_moveto(0)
         canvas.yview_moveto(0)
+        self.vscrollbar = vscrollbar
+        self.canvas = canvas
 
         # create a frame inside the canvas which will be scrolled with it
-        self.interior = interior = Frame(canvas)
+        self.interior = interior = Frame(canvas, name="interior")
         interior_id = canvas.create_window(0, 0, window=interior,
                                            anchor=NW)
 
@@ -46,23 +48,3 @@ class VerticalScrolledFrame(Frame):
                 # update the inner frame's width to fill the canvas
                 canvas.itemconfigure(interior_id, width=canvas.winfo_width())
         canvas.bind('<Configure>', _configure_canvas)
-
-
-if __name__ == "__main__":
-
-    class SampleApp(Tk):
-        def __init__(self, *args, **kwargs):
-            root = Tk.__init__(self, *args, **kwargs)
-
-
-            self.frame = VerticalScrolledFrame(root)
-            self.frame.pack()
-            self.label = Label(text="Shrink the window to activate the scrollbar.")
-            self.label.pack()
-            buttons = []
-            for i in range(10):
-                buttons.append(Button(self.frame.interior, text="Button " + str(i)))
-                buttons[-1].pack()
-
-    app = SampleApp()
-    app.mainloop()
